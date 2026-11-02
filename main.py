@@ -1,30 +1,33 @@
 import requests
-from fastapi import APIRouter, HTTPException, status
+from fastapi import FastAPI, HTTPException
 
-router = APIRouter()
+app = FastAPI()
 
-BASE_URL = "https://api.anulamultas.com.br/v1"  # Exemplo
-HEADERS = {"Authorization": "Bearer am_live_cdef0f0646b6_7a0b45344ce70d1879a9bc09583dc1a6
-"}
+ANULA_API_URL = "https://api.anulamultas.com.br/v1/multas"
+HEADERS = {
+    "Authorization": "Bearer am_live_cdef0f0646b6_7a0b45344ce70d1879a9bc09583dc1a6",
+    "Accept": "application/json"
+}
 
-@router.get("/api/v1/bi/multas")
+@app.get("/")
+def root():
+    return {"mensagem": "API do Power BI está ativa!"}
+
+@app.get("/api/v1/bi/multas")
 def obter_multas_bi():
-    url_alvo = f"{BASE_URL}/multas"
-    
     try:
-        resposta = requests.get(url_alvo, headers=HEADERS, timeout=30)
+        resposta = requests.get(ANULA_API_URL, headers=HEADERS, timeout=30)
         resposta.raise_for_status()
         return resposta.json()
-        
-    except requests.exceptions.HTTPError as err_http:
-        # Repassa o código de status exato retornado pela API de destino (ex: 401, 404, 403)
-        status_code = err_http.response.status_code if err_http.response is not None else status.HTTP_500_INTERNAL_SERVER_ERROR
-        detalhe = err_http.response.text if err_http.response is not None else str(err_http)
-        raise HTTPException(status_code=status_code, detail=f"Erro na API externa: {detalhe}")
-        
-    except requests.exceptions.RequestException as err_req:
-        # Trata erros de conexão, timeout ou DNS
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=f"Falha na comunicação com a API externa: {str(err_req)}"
-        )
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Erro na Anula Multas: {str(e)}")
+
+@app.get("/api/v1/bi/condutores")
+def obter_condutores_bi():
+    url_condutores = "https://api.anulamultas.com.br/v1/condutores"
+    try:
+        resposta = requests.get(url_condutores, headers=HEADERS, timeout=30)
+        resposta.raise_for_status()
+        return resposta.json()
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Erro na Anula Multas: {str(e)}")
