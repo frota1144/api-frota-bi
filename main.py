@@ -4,7 +4,8 @@ from fastapi import APIRouter, HTTPException, status
 router = APIRouter()
 
 BASE_URL = "https://api.anulamultas.com.br/v1"  # Exemplo
-HEADERS = {"Authorization": "Bearer SEU_TOKEN"}
+HEADERS = {"Authorization": "Bearer am_live_cdef0f0646b6_7a0b45344ce70d1879a9bc09583dc1a6
+"}
 
 @router.get("/api/v1/bi/multas")
 def obter_multas_bi():
