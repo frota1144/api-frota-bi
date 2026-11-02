@@ -1,24 +1,9 @@
-import requests
-from fastapi import FastAPI, HTTPException
-
-app = FastAPI(title="API Frota - Integração Power BI")
-
-# Rota de teste para verificar se a API está a funcionar
-@app.get("/")
-def inicio():
-    return {"mensagem": "API do Power BI está ativa!"}
-
-# Rota principal para o Power BI consumir os dados
 @app.get("/api/v1/bi/multas")
-def obter_dados_bi():
-    # Estrutura base pronta para integrar com a URL do Anula Multas
-    dados_exemplo = [
-        {
-            "id_multa": 1,
-            "ait": "A012345678",
-            "placa": "ABC-1234",
-            "status": "Indicação Pendente",
-            "valor": 195.23
-        }
-    ]
-    return dados_exemplo
+def obter_multas_bi():
+    url_alvo = f"{BASE_URL}/multas" # Ajuste o caminho da Anula Multas conforme a documentação deles
+    try:
+        resposta = requests.get(url_alvo, headers=HEADERS, timeout=30)
+        resposta.raise_for_status()
+        return resposta.json()
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Erro na integração: {str(e)}")
