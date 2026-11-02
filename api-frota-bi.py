@@ -16,7 +16,7 @@ def root():
 @app.get("/api/v1/bi/multas")
 def obter_multas_bi():
     try:
-        resposta = requests.get(f"{BASE_URL}/multas", headers=HEADERS, timeout=30)
+        resposta = requests.get(f"{https://portal-api.anulamulta.com.br/public}/multas", headers=HEADERS, timeout=30)
         resposta.raise_for_status()
         return resposta.json()
     except requests.exceptions.RequestException as e:
@@ -25,7 +25,7 @@ def obter_multas_bi():
 @app.get("/api/v1/bi/condutores")
 def obter_condutores_bi():
     try:
-        resposta = requests.get(f"{BASE_URL}/condutores", headers=HEADERS, timeout=30)
+        resposta = requests.get(f"{https://portal-api.anulamulta.com.br/public}/condutores", headers=HEADERS, timeout=30)
         resposta.raise_for_status()
         return resposta.json()
     except requests.exceptions.RequestException as e:
