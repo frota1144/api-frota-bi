@@ -12,12 +12,10 @@ HEADERS = {
     "Accept": "application/json"
 }
 
-# Rota de teste
 @app.get("/")
 def inicio():
     return {"mensagem": "API do Power BI está ativa!"}
 
-# Rota principal para o Power BI consumir as Multas Reais
 @app.get("/api/v1/bi/multas")
 def obter_dados_bi():
     try:
@@ -27,7 +25,6 @@ def obter_dados_bi():
     except requests.exceptions.RequestException as e:
         raise HTTPException(status_code=500, detail=f"Erro na Anula Multas: {str(e)}")
 
-# Rota principal para o Power BI consumir os Condutores Reais
 @app.get("/api/v1/bi/condutores")
 def obter_condutores_bi():
     try:
